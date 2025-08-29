@@ -162,7 +162,7 @@ ${script}
           {tabs.map((tab, idx) => (
             <button
               key={idx}
-              ref={el => (tabRefs.current[idx] = el)}
+              ref={el => { tabRefs.current[idx] = el; }}
               tabIndex={0}
               className={`px-2 py-1 border ${active === idx ? 'border-black' : 'border-transparent'}`}
               onClick={() => setActive(idx)}

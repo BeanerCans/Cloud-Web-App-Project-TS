@@ -10,8 +10,8 @@ export default function Header() {
   return (
     <header className="w-full">
       <div className="flex justify-between items-center py-2">
-        <div className="flex-1 text-center text-2xl font-semibold">Title</div>
-        <div className="flex-1 text-right pr-4">Student No.</div>
+        <div className="flex-1 text-center text-2xl font-semibold">Matthew Elliott's CSE3CWA Assignment 1</div>
+        <div className="flex-1 text-right pr-4">Student No: 22453699</div>
       </div>
       <nav className="flex items-center border-t-4 border-b-4 border-black py-1 px-2">
         <div className="flex gap-2 flex-1">
