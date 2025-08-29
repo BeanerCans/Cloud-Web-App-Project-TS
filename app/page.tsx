@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, use } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 type Tab = { title: string; content: string };
@@ -13,23 +13,9 @@ export default function Home() {
   const [active, setActive] = useState(0);
   const [last, setLast] = useState<string | null>(null);
 
-  export default function Home() {
-    const [last, setLast] = useState<string | null>(null);
-    useEffect(() => {
-      setLast(Cookies.get('activeMenu') || null);
-    }, []);
-
-    return (
-      <main>
-        <h1>Tabs Code Generator</h1>
-        {last && last !== '/' && (
-          <p>
-            Continue where you left off: <a href={last}>{last}</a>
-          </p>
-        )}
-        {/* ... tabs generator code below ... */}
-      </main>
-    )
+  useEffect(() => {
+    setLast(Cookies.get('activeMenu') || null);
+  }, []);
 
   const html = useMemo(() => {
     const esc = (s: string) =>
@@ -100,6 +86,12 @@ ${script}
   return (
     <main className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Tabs Code Generator</h1>
+
+      {last && last !== '/' && (
+        <p>
+          Continue where you left off: <a href={last}>{last}</a>
+        </p>
+      )}
 
       {tabs.map((t, i) => (
         <div key={i} className="border p-2 mb-2 rounded">
