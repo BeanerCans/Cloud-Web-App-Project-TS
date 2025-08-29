@@ -2,8 +2,8 @@ export default function AboutPage() {
     return (
         <section>
             <h1>About Me</h1>
-            <p>Name: Your Name</p>
-            <p>Student Number: 12345678</p>
+            <p>Name: Matthew Elliott</p>
+            <p>Student Number: 22453699</p>
 
             <h2>How to use this website</h2>
             {/* Embed video link here */}

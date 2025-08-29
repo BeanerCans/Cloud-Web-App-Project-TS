@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import Cookies from 'js-cookie';
 
 type Tab = { title: string; content: string };
@@ -12,6 +12,7 @@ export default function Home() {
   ]);
   const [active, setActive] = useState(0);
   const [last, setLast] = useState<string | null>(null);
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
     setLast(Cookies.get('activeMenu') || null);
@@ -83,6 +84,18 @@ ${script}
     window.open(url, '_blank');
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
+    if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+      const prev = (idx - 1 + tabRefs.current.length) % tabRefs.current.length;
+      tabRefs.current[prev]?.focus();
+      setActive(prev);
+    } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+      const next = (idx + 1) % tabRefs.current.length;
+      tabRefs.current[next]?.focus();
+      setActive(next);
+    }
+  };
+
   return (
     <main className="max-w-3xl mx-auto">
       <h1 className="text-2xl font-semibold mb-4">Tabs Code Generator</h1>
@@ -132,6 +145,74 @@ ${script}
       </div>
 
       <textarea className="border w-full p-2 mt-4" rows={16} readOnly value={html}/>
+
+      {/* Tabs Section */}
+      <div>
+        <h2 className="text-xl mb-2">Tabs</h2>
+        <div className="mb-2 flex items-center gap-2">
+          <span className="font-semibold">Tabs Headers:</span>
+          <button
+            className="border px-2"
+            onClick={() => setTabs([...tabs, { title: `Tab ${tabs.length + 1}`, content: '...' }])}
+          >
+            [+]
+          </button>
+        </div>
+        <div className="flex flex-col gap-2">
+          {tabs.map((tab, idx) => (
+            <button
+              key={idx}
+              ref={el => (tabRefs.current[idx] = el)}
+              tabIndex={0}
+              className={`px-2 py-1 border ${active === idx ? 'border-black' : 'border-transparent'}`}
+              onClick={() => setActive(idx)}
+              onKeyDown={e => {
+                if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                  const prev = (idx - 1 + tabs.length) % tabs.length;
+                  setActive(prev);
+                  tabRefs.current[prev]?.focus();
+                } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                  const next = (idx + 1) % tabs.length;
+                  setActive(next);
+                  tabRefs.current[next]?.focus();
+                }
+              }}
+            >
+              {tab.title}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Tabs Content */}
+      <div>
+        <h2 className="text-xl mb-2">Tabs Content</h2>
+        <div className="border p-4 min-w-[200px]">
+          {tabs[active]?.content}
+        </div>
+      </div>
+
+      {/* Output and Code */}
+      <div className="flex flex-col gap-2">
+        <label>
+          Output
+          <input className="border ml-2" style={{ width: 100 }} />
+        </label>
+        <div className="border-4 border-black p-2 min-w-[250px] min-h-[150px]">
+          {/* Simulated code output */}
+          <pre className="text-xs">
+{`<div>
+  <h2>Tabs Content</h2>
+  <ol>
+    <li>Install VSCode</li>
+    <li>Install Chrome</li>
+    <li>Install Node</li>
+    <li>etc</li>
+  </ol>
+</div>`}
+          </pre>
+        </div>
+      </div>
     </main>
   );
 }
