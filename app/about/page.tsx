@@ -23,11 +23,6 @@ export default function AboutPage() {
                     title="How to use this website"
                 ></iframe>
             </div>
-            {/* Or a local video fallback */}
-            <video controls width="600">
-                <source src="/howto.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
-            </video>
         </section>
     );
 }
