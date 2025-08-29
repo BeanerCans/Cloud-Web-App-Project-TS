@@ -1,10 +1,28 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [dark, setDark] = useState(false);
+
+  // Persist dark mode in localStorage and apply class to <html>
+  useEffect(() => {
+    if (dark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [dark]);
+
+  // On mount, check localStorage for theme
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') setDark(true);
+  }, []);
 
   const navLinks = [
     { href: '/', label: 'Tabs' },
@@ -32,6 +50,21 @@ export default function Header() {
             <span className="block w-6 h-0.5 bg-black"></span>
           </div>
         </button>
+        {/* Dark mode toggle */}
+        <div className="ml-4 flex items-center">
+          <label className="flex items-center cursor-pointer">
+            <input
+              type="checkbox"
+              className="hidden"
+              checked={dark}
+              onChange={() => setDark(!dark)}
+            />
+            <div className={`w-10 h-6 flex items-center bg-gray-300 rounded-full p-1 ${dark ? 'bg-black' : ''}`}>
+              <div className={`bg-white w-4 h-4 rounded-full shadow-md transform duration-300 ease-in-out ${dark ? 'translate-x-4' : ''}`}></div>
+            </div>
+            <span className="ml-2">Dark Mode</span>
+          </label>
+        </div>
       </div>
       {/* Desktop nav */}
       <nav className="hidden sm:flex border-t-4 border-b-4 border-black py-1 px-2 justify-center gap-4">
