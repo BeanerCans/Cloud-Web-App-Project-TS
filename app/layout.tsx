@@ -9,6 +9,21 @@ function Header() {
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [activeRoute, setActiveRoute] = useState<string | null>(null);
 
+  export default function RootLayout({children}: {children: React.ReactNode}) {
+    return (
+      <html lang="en">
+        <body className="min-h-screen flex flex-col">
+          <Header />
+          <main id="content" className="flex-grow p-4">
+            <Breadcrumb />
+          </main>
+          <Footer />
+        </body>
+      </html>
+    );
+  }
+    )
+
   useEffect(() => {
     // Load theme from localStorage
     const savedTheme = localStorage.getItem('theme');
