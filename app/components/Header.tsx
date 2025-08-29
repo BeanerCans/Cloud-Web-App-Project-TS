@@ -3,6 +3,10 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
+/**
+ * Header component.
+ * Displays the site title, student number, navigation links, hamburger menu, and dark mode toggle.
+ */
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [dark, setDark] = useState(false);
@@ -24,6 +28,7 @@ export default function Header() {
     if (saved === 'dark') setDark(true);
   }, []);
 
+  // Navigation links for the menu
   const navLinks = [
     { href: '/', label: 'Tabs' },
     { href: '/prelab', label: 'Pre-lab Questions' },

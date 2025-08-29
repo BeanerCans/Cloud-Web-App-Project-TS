@@ -1,3 +1,7 @@
+/**
+ * AboutPage component.
+ * Displays author info and an embedded Vimeo video.
+ */
 export default function AboutPage() {
     return (
         <section>

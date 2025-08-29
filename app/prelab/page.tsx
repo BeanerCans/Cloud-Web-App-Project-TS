@@ -2,10 +2,15 @@
 
 import { useState } from 'react';
 
+/**
+ * PrelabPage component.
+ * Renders a form for answering pre-lab questions.
+ */
 export default function PrelabPage() {
-  // Example questions
+  // State for answers to each question
   const [answers, setAnswers] = useState<string[]>(['', '', '']);
 
+  // List of pre-lab questions
   const questions = [
     'What is VSCode?',
     'What is Node.js used for?',

@@ -1,3 +1,7 @@
+/**
+ * Footer component.
+ * Displays a horizontal line and copyright.
+ */
 export default function Footer() {
   const today = new Date();
   const dateString = today.toLocaleDateString();

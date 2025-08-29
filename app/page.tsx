@@ -1,23 +1,33 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Cookies from 'js-cookie';
 
+// Type for a tab object
 type Tab = { title: string; content: string };
 
+/**
+ * Home page component.
+ * Renders a dynamic tab interface with keyboard navigation and code output.
+ */
 export default function Home() {
+  // State for tabs, active tab index, and last visited menu
   const [tabs, setTabs] = useState<Tab[]>([
     { title: 'Tab 1', content: 'Hello from Tab 1' },
     { title: 'Tab 2', content: 'Hello from Tab 2' },
   ]);
   const [active, setActive] = useState(0);
   const [last, setLast] = useState<string | null>(null);
+
+  // Refs for tab buttons to enable keyboard navigation
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
+  // On mount, load last visited menu from cookies
   useEffect(() => {
     setLast(Cookies.get('activeMenu') || null);
   }, []);
 
+  // Memoized HTML output for the tabs (for copy/preview)
   const html = useMemo(() => {
     const esc = (s: string) =>
       s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -74,25 +84,36 @@ ${script}
 </html>`;
   }, [tabs, active]);
 
+  /**
+   * Copies the generated HTML to the clipboard.
+   */
   const copy = async () => {
     await navigator.clipboard.writeText(html);
     alert('Copied!');
   };
 
+  /**
+   * Opens a preview of the generated HTML in a new window.
+   */
   const preview = () => {
     const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
     window.open(url, '_blank');
   };
 
+  /**
+   * Handles keyboard navigation for the tab buttons.
+   * @param e Keyboard event
+   * @param idx Index of the current tab
+   */
   const handleKeyDown = (e: React.KeyboardEvent, idx: number) => {
     if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
-      const prev = (idx - 1 + tabRefs.current.length) % tabRefs.current.length;
-      tabRefs.current[prev]?.focus();
+      const prev = (idx - 1 + tabs.length) % tabs.length;
       setActive(prev);
+      tabRefs.current[prev]?.focus();
     } else if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
-      const next = (idx + 1) % tabRefs.current.length;
-      tabRefs.current[next]?.focus();
+      const next = (idx + 1) % tabs.length;
       setActive(next);
+      tabRefs.current[next]?.focus();
     }
   };
 
