@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, use } from 'react';
+import Cookies from 'js-cookie';
 
 type Tab = { title: string; content: string };
 
@@ -10,6 +11,25 @@ export default function Home() {
     { title: 'Tab 2', content: 'Hello from Tab 2' },
   ]);
   const [active, setActive] = useState(0);
+  const [last, setLast] = useState<string | null>(null);
+
+  export default function Home() {
+    const [last, setLast] = useState<string | null>(null);
+    useEffect(() => {
+      setLast(Cookies.get('activeMenu') || null);
+    }, []);
+
+    return (
+      <main>
+        <h1>Tabs Code Generator</h1>
+        {last && last !== '/' && (
+          <p>
+            Continue where you left off: <a href={last}>{last}</a>
+          </p>
+        )}
+        {/* ... tabs generator code below ... */}
+      </main>
+    )
 
   const html = useMemo(() => {
     const esc = (s: string) =>

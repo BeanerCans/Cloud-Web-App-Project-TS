@@ -1,37 +1,25 @@
-// app/layout.tsx
-import './globals.css';
+'use client';
+
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-
-// Make this a client component because we need cookies/localStorage
-export const metadata = {
-  title: 'Assignment 1',
-  description: 'Next.js app for La Trobe',
-};
-
-// We'll inject a client header/footer using children layout
-export default function RootLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col">
-        <Header />
-        <main id="content" className="flex-grow p-4">{children}</main>
-        <Footer />
-      </body>
-    </html>
-  );
-}
+import Cookies from 'js-cookie';
 
 function Header() {
   const [open, setOpen] = useState(false);
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [activeRoute, setActiveRoute] = useState<string | null>(null);
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    if (saved === 'dark') {
+    // Load theme from localStorage
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
       document.documentElement.classList.add('dark');
       setTheme('dark');
     }
+
+    // Load last visited menu from cookies
+    const last = Cookies.get('activeMenu');
+    if (last) setActiveRoute(last);
   }, []);
 
   function toggleTheme() {
@@ -41,9 +29,24 @@ function Header() {
     document.documentElement.classList.toggle('dark');
   }
 
+  function handleNavClick(path: string) {
+    Cookies.set('activeMenu', path, { expires: 7 }); // cookie lasts 7 days
+    setActiveRoute(path);
+    setOpen(false);
+  }
+
+  const links = [
+    { href: '/', label: 'Home' },
+    { href: '/about', label: 'About' },
+    { href: '/escape-room', label: 'Escape Room' },
+    { href: '/coding-races', label: 'Coding Races' },
+    { href: '/court-room', label: 'Court Room' },
+  ];
+
   return (
     <header className="flex items-center justify-between p-4 border-b bg-gray-100 dark:bg-gray-800">
-      <span className="font-bold">Student # 12345678</span>
+      <span className="font-bold">Student #12345678</span>
+
       <button 
         className="sm:hidden border px-2 py-1" 
         onClick={() => setOpen(!open)}
@@ -52,13 +55,20 @@ function Header() {
       >
         ☰
       </button>
+
       <nav className={`sm:flex gap-4 ${open ? 'block' : 'hidden'}`} id="mobile-menu">
-        <Link href="/">Home</Link>
-        <Link href="/about">About</Link>
-        <Link href="/escape-room">Escape Room</Link>
-        <Link href="/coding-races">Coding Races</Link>
-        <Link href="/court-room">Court Room</Link>
+        {links.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            onClick={() => handleNavClick(l.href)}
+            className={activeRoute === l.href ? 'font-bold underline' : ''}
+          >
+            {l.label}
+          </Link>
+        ))}
       </nav>
+
       <button onClick={toggleTheme} className="border px-2 py-1 ml-2">
         {theme === 'light' ? 'Dark' : 'Light'}
       </button>
@@ -66,10 +76,4 @@ function Header() {
   );
 }
 
-function Footer() {
-  return (
-    <footer className="p-4 border-t text-center bg-gray-100 dark:bg-gray-800">
-      © {new Date().getFullYear()} Your Name – Student #12345678 – {new Date().toLocaleDateString()}
-    </footer>
-  );
-}
+export default Header;
