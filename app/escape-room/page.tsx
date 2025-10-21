@@ -145,7 +145,7 @@ function Stage3({ next }: { next: () => void }) {
     function check() {
         const expected = 'for(let i=0;i<=1000;i++){console.log(i);}';
         const normalised = input.replace(/\s+/g, '');
-        if (normalised === expected_) {
+        if (normalised === expected) {
             setMessage('Perfect loop! You escaped!');
             setTimeout(next, 1500);
         } else {
