@@ -1,12 +1,16 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
-  output   = "../app/generated/prisma"
+  provider = "primsa-client-js"
 }
 
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
+}
+
+model GameProgess {
+  id        Int       @id @default(autoincrement())
+  studentId String
+  stage     String
+  time      Int
+  createdAt DateTime @default(now())
 }
