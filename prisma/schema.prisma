@@ -1,13 +1,12 @@
-generator client {
-  provider = "primsa-client-js"
-}
-
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model GameProgess {
+generator client {
+  provider = "prisma-client-js"
+}
+model GameProgress {
   id        Int       @id @default(autoincrement())
   studentId String
   stage     String

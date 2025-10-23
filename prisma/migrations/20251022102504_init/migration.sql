@@ -1,0 +1,8 @@
+-- CreateTable
+CREATE TABLE "GameProgress" (
+    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "studentId" TEXT NOT NULL,
+    "stage" TEXT NOT NULL,
+    "time" INTEGER NOT NULL,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
